@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "Danh sách danh mục";
+}
+
+<button type="button" class="btn" style="background-color:darkblue; color:white;" onclick="location.href='@Url.Action("Create", "DanhMuc")'">
+    Thêm danh mục mới
+</button>
+
+<div>
+    <table id="categoryList" class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên danh mục</th>
+                <th>Mô tả</th>
+                <th>ID danh mục cha</th>
+                <th>Tên danh mục cha</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $.ajax({
+            url: '@Url.Action("GetListDanhMuc", "DanhMuc")',
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                var str = $('#categoryList tbody');
+                str.empty();
+
+                $.each(data, function (index, category) {
+                    var row = "<tr><td>" + category.CategoryID + "</td>" +
+                              "<td>" + category.CategoryName + "</td>" +
+                              "<td>" + category.Description + "</td>" +
+                              "<td>" + category.ParentCategoryID + "</td>" +
+                              "<td>" + category.ParentCategoryName + "</td>" +
+                              "</tr>";
+                    str.append(row);
+                });
+            },
+            error: function() {
+                alert("Đã xảy ra lỗi khi load danh mục.");
+            }
+        });
+    });
+</script>
